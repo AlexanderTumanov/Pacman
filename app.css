@@ -1,13 +1,66 @@
-div[type='H']{background-image: url(H.jpg);background-size: contain;}
-div[type='1']{background-image: url(1.jpg);background-size: contain;}
-div[type='2']{background-image: url(2.jpg);background-size: contain;}
-div[type='3']{background-image: url(3.jpg);background-size: contain;}
-div[type='4']{background-image: url(4.jpg);background-size: contain;}
-div[type='V']{background-image: url(V.jpg);background-size: contain;}
-div[type='o']{background-image: url(o.jpg);background-size: contain;}
-div[type='T']{background-image: url(T.jpg);background-size: contain;}
-div[type='B']{background-image: url(B.jpg);background-size: contain;}
-div[type='L']{background-image: url(L.jpg);background-size: contain;}
-div[type='R']{background-image: url(R.jpg);background-size: contain;}
-div[type='Z']{background-image: url(Z.jpg);background-size: contain;}
-body{background-color: black;}
+div[type="H"] {
+  background-image: url(H.jpg);
+  background-size: contain;
+}
+div[type="1"] {
+  background-image: url(1.jpg);
+  background-size: contain;
+}
+div[type="2"] {
+  background-image: url(2.jpg);
+  background-size: contain;
+}
+div[type="3"] {
+  background-image: url(3.jpg);
+  background-size: contain;
+}
+div[type="4"] {
+  background-image: url(4.jpg);
+  background-size: contain;
+}
+div[type="V"] {
+  background-image: url(V.jpg);
+  background-size: contain;
+}
+div[type="o"] {
+  background-image: url(o.jpg);
+  background-size: contain;
+}
+div[type="T"] {
+  background-image: url(T.jpg);
+  background-size: contain;
+}
+div[type="B"] {
+  background-image: url(B.jpg);
+  background-size: contain;
+}
+div[type="L"] {
+  background-image: url(L.jpg);
+  background-size: contain;
+}
+div[type="R"] {
+  background-image: url(R.jpg);
+  background-size: contain;
+}
+div[type="Z"] {
+  background-image: url(Z.jpg);
+  background-size: contain;
+}
+/*packman iomages*/
+div[type="P"],div[type="P"][angle='0'] {
+  background-image: url(P.jpg);
+  background-size: contain;
+}
+div[type="P"][angle='90'] {
+    transform:rotate(90deg);
+}
+  div[type="P"][angle='180'] {
+    transform:rotate(180deg);
+  }
+  div[type="P"][angle='270'] {
+    transform:rotate(270deg);
+  }
+/*-------*/
+body {
+  background-color: black;
+}
