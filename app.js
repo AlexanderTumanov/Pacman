@@ -23,7 +23,7 @@ var PModel = {
     ["VooooooooooooVVooooooooooooV"],
     ["Vo1HH2o1HHH2oVVo1HHH2o1HH2oV"],
     ["Vo3HH4o3HHH4o34o3HHH4oV1H4oV"],
-    ["VOoo12oooooooP oooooooVVooOV"],
+    ["Vooo12oooooooP oooooooVVoooV"],
     ["3H2oVVo12o1HHHHHH2o12oVVo1H4"],
     ["1H4o34oVVo3HH21HH4oVVo34o3H2"],
     ["VooooooVVooooVVooooVVooooooV"],
@@ -109,7 +109,7 @@ var PView = {
 var PController = {
   model: null,
   view: null,
-  tik: 500,
+  tik: 350,
   init: function () {
     this.model = PModel;
     // this.model.init(20, 40);
@@ -189,16 +189,24 @@ var PController = {
   },
 
   moveDown: function () {
-    this.moveP(Pacman.y+1,Pacman.x, '90');
+    if (this.checkifFacing('90')){
+      this.moveP(Pacman.y+1,Pacman.x, '90');
+    }
   },
   moveLeft: function () {
-    this.moveP(Pacman.y,Pacman.x-1, '180');
+    if (this.checkifFacing('180')){
+      this.moveP(Pacman.y,Pacman.x-1, '180');
+    }
   },
   moveRight: function () {
-    this.moveP(Pacman.y,Pacman.x+1, '0')
+    if (this.checkifFacing('0')){
+      this.moveP(Pacman.y,Pacman.x+1, '0');
+    }
   },
   moveUp: function () {
-    this.moveP(Pacman.y-1,Pacman.x, '270')
+    if (this.checkifFacing('270')){
+      this.moveP(Pacman.y-1,Pacman.x, '270');
+    }
   },
   
   drop: function () {
@@ -210,6 +218,13 @@ var PController = {
   },
   pause: function () {},
 
+  checkifFacing: function (angle) {
+    if (Pacman.angle != angle){
+      return true;
+    }
+    return false;
+  },
+
   checkifEmpty: function (r,c) {
     if(r<0||r>=this.model.mazeArray.length)return false;
     if(c<0||c>=this.model.mazeArray[c].length)return false;
@@ -219,40 +234,3 @@ var PController = {
     return false;
   }
 };
-
-
-/*
-
-    ["1HHHHHHHHHHHH21HHHHHHHHHHHH2"],
-    ["VooooooooooooVVooooooooooooV"],
-    ["Vo1HH2o1HHH2oVVo1HHH2o1HH2oV"],
-    ["VOV  VoV   VoVVoV   VoV  VOV"],
-    ["Vo3HH4o3HHH4o34o3HHH4o3HH4oV"],
-    ["VooooooooooooooooooooooooooV"],
-    ["Vo1HH2o12o1HHHHHH2o12o1HH2oV"],
-    ["Vo3HH4oVVo3HH21HH4oVVo3HH4oV"],
-    ["VooooooVVooooVVooooVVooooooV"],
-    ["3HHHH2oV3HH2 VV 1HH4Vo1HHHH4"],
-    ["     VoV1HH4 34 3HH2VoV     "],
-    ["     VoVV          VVoV     "],
-    ["     VoVV 1HHZZHH2 VVoV     "],
-    ["LHHHH4o34 V      V 34o3HHHHR"],
-    ["      o   V      V   o      "],
-    ["LHHHH2o12 V      V 12o1HHHHR"],
-    ["     VoVV 3HHHHHH4 VVoV     "],
-    ["     VoVV          VVoV     "],
-    ["     VoVV 1HHHHHH2 VVoV     "],
-    ["1HHHH4o34 3HH21HH4 34o3HHHH2"],
-    ["VooooooooooooVVooooooooooooV"],
-    ["Vo1HH2o1HHH2oVVo1HHH2o1HH2oV"],
-    ["Vo3HH4o3HHH4o34o3HHH4oV1H4oV"],
-    ["VOoo12oooooooP oooooooVVooOV"],
-    ["3H2oVVo12o1HHHHHH2o12oVVo1H4"],
-    ["1H4o34oVVo3HH21HH4oVVo34o3H2"],
-    ["VooooooVVooooVVooooVVooooooV"],
-    ["Vo1HHHH43HH2oVVo1HH43HHHH2oV"],
-    ["Vo3HHHHHHHH4o34o3HHHHHHHH4oV"],
-    ["VooooooooooooooooooooooooooV"],
-    ["3HHHHHHHHHHHHHHHHHHHHHHHHHH4"],
-  ],
-*/
