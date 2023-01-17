@@ -64,3 +64,23 @@ div[type="P"][angle='90'] {
 body {
   background-color: black;
 }
+
+div[type="5"] {
+  background-image: url(RedDown.jpg);
+  background-size: contain;
+}
+
+div[type="6"] {
+  background-image: url(BlueDown.jpg);
+  background-size: contain;
+}
+
+div[type="7"] {
+  background-image: url(YellowDown.jpg);
+  background-size: contain;
+}
+
+div[type="8"] {
+  background-image: url(PinkDown.jpg);
+  background-size: contain;
+}
