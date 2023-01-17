@@ -49,55 +49,40 @@ Ghost.prototype = {
   },
 
   moveGhost: function () {
+    let arr = [ { a: "270", d: this.getDistance(this.y-1, this.x ) },
+    { a: "0", d: this.getDistance(this.y, this.x + 1) },
+    { a: "90", d: this.getDistance(this.y + 1, this.x) },
+    { a: "180", d: this.getDistance(this.y, this.x - 1) },
+  ];
+  arr.sort(function (a, b) {
+    return a.d - b.d;
+  });
+  this.angle = arr[0].a;
+
     switch (this.angle) {
       case "270":
         if (PController.checkifEmpty(this.y - 1, this.x, this.angle)) {
-          this.moveG(this.y - 1, this.x, this.angle);
-        } else {
-          let arr = [
-            { a: "0", d: this.getDistance(this.y, this.x + 1) },
-            { a: "90", d: this.getDistance(this.y + 1, this.x) },
-            { a: "180", d: this.getDistance(this.y, this.x - 1) },
-          ];
-          this.moveGhost1(arr);
+
+            this.moveG(this.y - 1, this.x, this.angle);
+
         }
         //this.moveG(this.y-1,this.x, this.angle);
         break;
       case "0":
         if (PController.checkifEmpty(this.y, this.x + 1, this.angle)) {
-          this.moveG(this.y, this.x + 1, this.angle);
-        } else {
-          let arr = [
-            { a: "270", d: this.getDistance(this.y - 1, this.x) },
-            { a: "90", d: this.getDistance(this.y + 1, this.x) },
-            { a: "180", d: this.getDistance(this.y, this.x - 1) },
-          ];
-          this.moveGhost1(arr);
+          this.moveG(this.y  , this.x+1, this.angle);
+
         }
 
         break;
       case "90":
         if (PController.checkifEmpty(this.y + 1, this.x, this.angle)) {
           this.moveG(this.y + 1, this.x, this.angle);
-        } else {
-          let arr = [
-            { a: "0", d: this.getDistance(this.y, this.x + 1) },
-            { a: "270", d: this.getDistance(this.y - 1, this.x) },
-            { a: "180", d: this.getDistance(this.y, this.x - 1) },
-          ];
-          this.moveGhost1(arr);
         }
         break;
       case "180":
         if (PController.checkifEmpty(this.y, this.x - 1, this.angle)) {
-          this.moveG(this.y, this.x - 1, this.angle);
-        } else {
-          let arr = [
-            { a: "270", d: this.getDistance(this.y - 1, this.x) },
-            { a: "90", d: this.getDistance(this.y + 1, this.x) },
-            { a: "0", d: this.getDistance(this.y, this.x + 1) },
-          ];
-          this.moveGhost1(arr);
+          this.moveG(this.y , this.x-1, this.angle);
         }
         break;
     }
@@ -130,6 +115,7 @@ Ghost.prototype = {
       PController.view.draw();
       return true;
     } else {
+      return;
       switch (this.angle) {
         case "270":
           if (Pacman.x > this.x) {
@@ -235,7 +221,7 @@ var PView = {
 var PController = {
   model: null,
   view: null,
-  tik: 350,
+  tik: 200,
   init: function () {
     this.model = PModel;
     // this.model.init(20, 40);
