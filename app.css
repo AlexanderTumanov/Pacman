@@ -84,3 +84,15 @@ div[type="8"] {
   background-image: url(PinkDown.jpg);
   background-size: contain;
 }
+
+div#score {
+  color: white ;
+  z-index: 10;
+  width: 60px;
+  height: 50px;
+  position: absolute; 
+  left: 600px; 
+  top: 800px;
+  font-size: 45px;
+  font-family: Arial;
+}

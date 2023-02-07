@@ -16,14 +16,14 @@ var PModel = {
     ["3HHHH4o34 V      V 34o3HHHH4"],
     ["      o   V6  7 8V   o      "],
     ["1HHHH2o12 V      V 12o1HHHH2"],
-    ["     VoVV 3HHHHHH4 VVoV     "],
+    ["     VoVV 3HHZZHH4 VVoV     "],
     ["     VoVV          VVoV     "],
     ["     VoVV 1HHHHHH2 VVoV     "],
     ["1HHHH4o34 3HH21HH4 34o3HHHH2"],
     ["VooooooooooooVVooooooooooooV"],
     ["Vo1HH2o1HHH2oVVo1HHH2o1HH2oV"],
-    ["Vo3HH4o3HHH4o34o3HHH4oV1H4oV"],
-    ["Vooo12oooooooP oooooooVVoooV"],
+    ["Vo3H2Vo3HHH4o34o3HHH4oV1H4oV"],
+    ["VoooVVoooooooP oooooooVVoooV"],
     ["3H2oVVo12o1HHHHHH2o12oVVo1H4"],
     ["1H4o34oVVo3HH21HH4oVVo34o3H2"],
     ["VooooooVVooooVVooooVVooooooV"],
@@ -33,6 +33,7 @@ var PModel = {
     ["3HHHHHHHHHHHHHHHHHHHHHHHHHH4"],
   ],
   ghosts: [],
+  score: 0,
 };
 
 function Ghost() {
@@ -49,29 +50,27 @@ Ghost.prototype = {
   },
 
   moveGhost: function () {
-    let arr = [ { a: "270", d: this.getDistance(this.y-1, this.x ) },
-    { a: "0", d: this.getDistance(this.y, this.x + 1) },
-    { a: "90", d: this.getDistance(this.y + 1, this.x) },
-    { a: "180", d: this.getDistance(this.y, this.x - 1) },
-  ];
-  arr.sort(function (a, b) {
-    return a.d - b.d;
-  });
-  this.angle = arr[0].a;
+    let arr = [
+      { a: "270", d: this.getDistance(this.y - 1, this.x) },
+      { a: "0", d: this.getDistance(this.y, this.x + 1) },
+      { a: "90", d: this.getDistance(this.y + 1, this.x) },
+      { a: "180", d: this.getDistance(this.y, this.x - 1) },
+    ];
+    arr.sort(function (a, b) {
+      return a.d - b.d;
+    });
+    this.angle = arr[0].a;
 
     switch (this.angle) {
       case "270":
         if (PController.checkifEmpty(this.y - 1, this.x, this.angle)) {
-
-            this.moveG(this.y - 1, this.x, this.angle);
-
+          this.moveG(this.y - 1, this.x, this.angle);
         }
         //this.moveG(this.y-1,this.x, this.angle);
         break;
       case "0":
         if (PController.checkifEmpty(this.y, this.x + 1, this.angle)) {
-          this.moveG(this.y  , this.x+1, this.angle);
-
+          this.moveG(this.y, this.x + 1, this.angle);
         }
 
         break;
@@ -82,7 +81,7 @@ Ghost.prototype = {
         break;
       case "180":
         if (PController.checkifEmpty(this.y, this.x - 1, this.angle)) {
-          this.moveG(this.y , this.x-1, this.angle);
+          this.moveG(this.y, this.x - 1, this.angle);
         }
         break;
     }
@@ -116,21 +115,6 @@ Ghost.prototype = {
       return true;
     } else {
       return;
-      switch (this.angle) {
-        case "270":
-          if (Pacman.x > this.x) {
-          } else if (Pacman.x > this.x) {
-          }
-          break;
-        case "0":
-          break;
-        case "90":
-          break;
-        case "180":
-          break;
-      }
-      this.angRandom();
-      this.moveGhost();
     }
   },
 };
@@ -149,6 +133,7 @@ var PView = {
       model.ghosts[i] = new Ghost();
       model.ghosts[i].model = model;
     }
+    this.playerScorePara = document.getElementById("score");
     model.ghosts[0].id = 5;
     model.ghosts[1].id = 6;
     model.ghosts[2].id = 7;
@@ -222,6 +207,7 @@ var PController = {
   model: null,
   view: null,
   tik: 200,
+  pauseInd: 0,
   init: function () {
     this.model = PModel;
     // this.model.init(20, 40);
@@ -232,9 +218,11 @@ var PController = {
     this.wait(this.tik, this.oneTik, this, this.view);
   },
   oneTik: function () {
-    PController.moveNext();
-    for (let i = 0; i < 4; i++) {
-      this.model.ghosts[i].moveGhost();
+    if (!this.pauseInd) {
+      PController.moveNext();
+      for (let i = 0; i < 4; i++) {
+        this.model.ghosts[i].moveGhost();
+      }
     }
     //next tik
     PController.wait(
@@ -265,16 +253,9 @@ var PController = {
       case 38: //up arrow
         this.moveUp();
         break;
-      //case 32: //space
-      //this.drop();
-      //break;
-      //case 27: //escape
-      //this.pause();
-      //break;
-      //case 90:
-      //case 122: //z or Z
-      //this.rotateLeft();
-      //break;
+      case 27: //escape
+        this.pause();
+        break;
     }
   },
 
@@ -296,14 +277,19 @@ var PController = {
     this.view.draw();
   },
   moveP: function (r, c, angle) {
-    if (this.checkifEmpty(r, c)) {
-      this.model.mazeArray[Pacman.y][Pacman.x] = " ";
-      Pacman.y = r;
-      Pacman.x = c;
-      this.model.mazeArray[Pacman.y][Pacman.x] = "P";
-      Pacman.angle = angle;
-      this.view.draw();
-      return true;
+    if (PController.pauseInd == 0) {
+      if (this.checkifEmpty(r, c)) {
+        if (this.model.mazeArray[r][c] === "o") {
+          updateScore();
+        }
+        this.model.mazeArray[Pacman.y][Pacman.x] = " ";
+        Pacman.y = r;
+        Pacman.x = c;
+        this.model.mazeArray[Pacman.y][Pacman.x] = "P";
+        Pacman.angle = angle;
+        this.view.draw();
+        return true;
+      }
     }
   },
 
@@ -335,7 +321,6 @@ var PController = {
     this.f = this.model.createFigure();
     this.view.draw();
   },
-  pause: function () {},
 
   checkifFacing: function (angle) {
     if (Pacman.angle != angle) {
@@ -350,8 +335,26 @@ var PController = {
     switch (this.model.mazeArray[r][c]) {
       case "o":
       case " ":
+      case "Z":
         return true;
     }
     return false;
   },
+  pause: function () {
+    if (PController.pauseInd) {
+      PController.pauseInd = 0;
+      this.tik = 200;
+      PView.mainDiv.style.opacity = 1;
+      PController.view.playerScorePara.style.opacity = 1;
+    } else {
+      PController.pauseInd = 1;
+      PView.mainDiv.style.opacity = 0.1;
+      PController.view.playerScorePara.style.opacity = 0.3;
+    }
+  },
 };
+
+function updateScore() {
+  PController.model.score += 10;
+  PController.view.playerScorePara.innerHTML = `Score   ${PController.model.score}`;
+}
