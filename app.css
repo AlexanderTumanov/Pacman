@@ -96,3 +96,16 @@ div#score {
   font-size: 45px;
   font-family: Arial;
 }
+
+div#gameover {
+  color: red ; ;
+  z-index: 11;
+  width: 500px;
+  height: 50px;
+  position: absolute; 
+  left: 635px; 
+  top: 329px;
+  font-size: 75px;
+  font-family: Arial;
+  visibility: hidden;
+}

@@ -337,6 +337,9 @@ var PController = {
       case " ":
       case "Z":
         return true;
+      case "P":
+        this.pause();
+        document.getElementById("gameover").style.visibility = "visible";
     }
     return false;
   },
@@ -358,3 +361,4 @@ function updateScore() {
   PController.model.score += 10;
   PController.view.playerScorePara.innerHTML = `Score   ${PController.model.score}`;
 }
+
