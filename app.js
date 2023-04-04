@@ -51,17 +51,6 @@ Ghost.prototype = {
   },
 
   moveGhost: function () {
-   /* let arr = [
-      { a: "270", d: this.getDistance(this.y - 1, this.x) },
-      { a: "0", d: this.getDistance(this.y, this.x + 1) },
-      { a: "90", d: this.getDistance(this.y + 1, this.x) },
-      { a: "180", d: this.getDistance(this.y, this.x - 1) },
-    ];
-    arr.sort(function (a, b) {
-      return a.d - b.d;
-    });
-    this.angle = arr[0].a;
-   */
     let f = PView.cells[this.y][this.x].getAttribute("smell");
 
     let arrS = [
@@ -81,41 +70,38 @@ Ghost.prototype = {
     else {
       this.tracking = false;
     }
+
+    if (this.tracking == false) {
+      let arr = [
+        { a: "270", d: this.getDistance(this.y - 1, this.x) },
+        { a: "0", d: this.getDistance(this.y, this.x + 1) },
+        { a: "90", d: this.getDistance(this.y + 1, this.x) },
+        { a: "180", d: this.getDistance(this.y, this.x - 1) },
+      ];
+      arr.sort(function (a, b) {
+        return a.d - b.d;
+      });
+      this.angle = arr[0].a;
+    }
     switch (this.angle) {
       case "270":
         if (PController.checkifEmpty(this.y - 1, this.x, this.angle)) {
           this.moveG(this.y - 1, this.x, this.angle);
-          break;
-        }
-        if (this.tracking == false) {
-          this.angle = this.angRandom();
         }
         break;
       case "0":
         if (PController.checkifEmpty(this.y, this.x + 1, this.angle)) {
           this.moveG(this.y, this.x + 1, this.angle);
-          break;
-        }
-        if (this.tracking == false) {
-          this.angle = this.angRandom();
         }
         break;
       case "90":
         if (PController.checkifEmpty(this.y + 1, this.x, this.angle)) {
           this.moveG(this.y + 1, this.x, this.angle);
-          break;
-        }
-        if (this.tracking == false) {
-          this.angle = this.angRandom();
         }
         break;
       case "180":
         if (PController.checkifEmpty(this.y, this.x - 1, this.angle)) {
           this.moveG(this.y, this.x - 1, this.angle);
-          break;
-        }
-        if (this.tracking == false) {
-          this.angle = this.angRandom();
         }
         break;
     }
