@@ -40,17 +40,18 @@ function Ghost() {
   this.id;
   this.angle = "90";
   this.pastEl = " ";
+  this.tracking = false;
 }
 Ghost.prototype = {
   angRandom: function () {
     const angles = ["0", "90", "180", "270"];
 
     const randomAng = Math.floor(Math.random() * 4);
-    this.angle = angles[randomAng];
+    return angles[randomAng];
   },
 
   moveGhost: function () {
-    let arr = [
+   /* let arr = [
       { a: "270", d: this.getDistance(this.y - 1, this.x) },
       { a: "0", d: this.getDistance(this.y, this.x + 1) },
       { a: "90", d: this.getDistance(this.y + 1, this.x) },
@@ -60,32 +61,66 @@ Ghost.prototype = {
       return a.d - b.d;
     });
     this.angle = arr[0].a;
+   */
+    let f = PView.cells[this.y][this.x].getAttribute("smell");
 
+    let arrS = [
+      { a: "0", s: PView.cells[this.y][this.x+1].getAttribute("smell") },
+      { a: "90", s: PView.cells[this.y+1][this.x].getAttribute("smell") },
+      { a: "180", s: PView.cells[this.y][this.x-1].getAttribute("smell") },
+      { a: "270", s: PView.cells[this.y-1][this.x].getAttribute("smell") },
+    ];
+    arrS.sort(function (a, b) {
+      return b.s - a.s;
+    });
+
+    if (f > 0) {
+      this.angle = arrS[0].a;
+      this.tracking = true;
+    }
+    else {
+      this.tracking = false;
+    }
     switch (this.angle) {
       case "270":
         if (PController.checkifEmpty(this.y - 1, this.x, this.angle)) {
           this.moveG(this.y - 1, this.x, this.angle);
+          break;
         }
-        //this.moveG(this.y-1,this.x, this.angle);
+        if (this.tracking == false) {
+          this.angle = this.angRandom();
+        }
         break;
       case "0":
         if (PController.checkifEmpty(this.y, this.x + 1, this.angle)) {
           this.moveG(this.y, this.x + 1, this.angle);
+          break;
         }
-
+        if (this.tracking == false) {
+          this.angle = this.angRandom();
+        }
         break;
       case "90":
         if (PController.checkifEmpty(this.y + 1, this.x, this.angle)) {
           this.moveG(this.y + 1, this.x, this.angle);
+          break;
+        }
+        if (this.tracking == false) {
+          this.angle = this.angRandom();
         }
         break;
       case "180":
         if (PController.checkifEmpty(this.y, this.x - 1, this.angle)) {
           this.moveG(this.y, this.x - 1, this.angle);
+          break;
+        }
+        if (this.tracking == false) {
+          this.angle = this.angRandom();
         }
         break;
     }
     PController.view.draw();
+    
   },
 
   getDistance: function (r, c) {
@@ -189,6 +224,7 @@ var PView = {
       x = parseInt(b.id.substring(0, k));
       y = parseInt(b.id.substring(k + 1));
       this.cells[x][y] = b;
+      b.setAttribute("smell", 0);
     }
   },
   draw: function () {
@@ -286,9 +322,22 @@ var PController = {
         Pacman.y = r;
         Pacman.x = c;
         this.model.mazeArray[Pacman.y][Pacman.x] = "P";
+
+        this.updateSmell();
+        PView.cells[r][c].setAttribute("smell",10);
         Pacman.angle = angle;
         this.view.draw();
         return true;
+      }
+    }
+  },
+
+  updateSmell:function(){
+    for (let r = 0, rows = this.model.mazeArray.length; r < rows; r++) {
+      for (let c = 0, cols = this.model.mazeArray[r].length; c < cols; c++) {
+        PView.cells[r][c].setAttribute("type", this.model.mazeArray[r][c]);
+          let s=PView.cells[r][c].getAttribute("smell");
+          PView.cells[r][c].setAttribute("smell",Math.max(0,s-1));
       }
     }
   },
